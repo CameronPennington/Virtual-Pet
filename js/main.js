@@ -26,6 +26,8 @@ var GameState = {
 		this.pet = this.game.add.sprite(100, 400, "pet");
 		this.pet.anchor.setTo(0.5);
 
+		this.pet.animations.add("funnyfaces", [1, 2, 3, 2, 1], 7, false);
+
 		//custom properties
 		this.pet.customParams = { health: 100, fun: 100 };
 
@@ -60,6 +62,14 @@ var GameState = {
 
 		this.selectedItem = null;
 		this.uiBlocked = false;
+
+		const style = { font: "20px Arial", fill: "#fff" };
+		this.game.add.text(10, 20, "Health:", style);
+		this.game.add.text(140, 20, "Fun:", style);
+
+		this.healthText = this.game.add.text(80, 20, "", style);
+		this.funText = this.game.add.text(185, 20, "", style);
+		this.refreshStats();
 	},
 	pickItem: function (sprite, event) {
 		if (!this.uiBlocked) {
@@ -85,7 +95,7 @@ var GameState = {
 			sprite.alpha = 1;
 
 			this.pet.customParams.fun += 10;
-			console.log(this.pet.customParams.fun);
+			this.refreshStats();
 		}, this);
 		petRotation.start();
 	},
@@ -107,6 +117,7 @@ var GameState = {
 			petMovement.to({ x, y }, 700);
 			petMovement.onComplete.add(() => {
 				newItem.destroy();
+				this.pet.animations.play("funnyfaces");
 				this.uiBlocked = false;
 				var stat;
 				for (stat in newItem.customParams) {
@@ -114,9 +125,14 @@ var GameState = {
 						this.pet.customParams[stat] += newItem.customParams[stat];
 					}
 				}
+				this.refreshStats();
 			}, this);
 		}
 		petMovement.start();
+	},
+	refreshStats: function () {
+		this.healthText.text = this.pet.customParams.health;
+		this.funText.text = this.pet.customParams.fun;
 	},
 };
 
