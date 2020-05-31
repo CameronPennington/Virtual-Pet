@@ -70,6 +70,12 @@ var GameState = {
 		this.healthText = this.game.add.text(80, 20, "", style);
 		this.funText = this.game.add.text(185, 20, "", style);
 		this.refreshStats();
+
+		this.statsDecreaser = this.game.time.events.loop(
+			Phaser.Timer.SECOND * 5,
+			this.reduceProperties,
+			this
+		);
 	},
 	pickItem: function (sprite, event) {
 		if (!this.uiBlocked) {
@@ -133,6 +139,11 @@ var GameState = {
 	refreshStats: function () {
 		this.healthText.text = this.pet.customParams.health;
 		this.funText.text = this.pet.customParams.fun;
+	},
+	reduceProperties: function () {
+		this.pet.customParams.health -= 10;
+		this.pet.customParams.fun -= 15;
+		this.refreshStats();
 	},
 };
 
