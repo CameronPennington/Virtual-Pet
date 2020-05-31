@@ -145,6 +145,20 @@ var GameState = {
 		this.pet.customParams.fun -= 15;
 		this.refreshStats();
 	},
+	update: function () {
+		if (
+			this.pet.customParams.health <= 0 ||
+			this.pet.customParams.health <= 0
+		) {
+			this.pet.frame = 4;
+			this.uiBlocked = true;
+
+			this.game.time.events.add(2000, this.gameOver, this);
+		}
+	},
+	gameOver: function () {
+		this.game.state.restart();
+	},
 };
 
 //initiate the Phaser framework
